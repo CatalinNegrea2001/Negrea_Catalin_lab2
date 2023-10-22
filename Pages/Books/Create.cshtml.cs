@@ -21,11 +21,13 @@ namespace Negrea_Catalin_lab2.Pages.Books
 
         public IActionResult OnGet()
         {
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID","PublisherName");
-            ViewData["AuthorID"] = new SelectList(_context.Set<Authors>(), "ID", "FirstName");
-            ViewData["AuthorID"] = new SelectList(_context.Set<Authors>(), "ID", "LastName");
+            var authors = _context.Authors.Select(a => new { a.ID, FullName = $"{a.FirstName} {a.LastName}" }).ToList();
+            ViewData["AuthorID"] = new SelectList(authors, "ID", "FullName");
+            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
             return Page();
         }
+
+
 
         [BindProperty]
         public Book Book { get; set; } = default!;
@@ -38,8 +40,8 @@ namespace Negrea_Catalin_lab2.Pages.Books
             {
                 return Page();
             }
+            
 
-          
             _context.Book.Add(Book);
             await _context.SaveChangesAsync();
 
