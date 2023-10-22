@@ -12,6 +12,7 @@ namespace Negrea_Catalin_lab2.Models
         public int? AuthorID { get; set; }
         public Authors? Author { get; set; }
 
+        public string AuthorName => $"{Author.FirstName} {Author.LastName}";
         public decimal Price { get; set; }
         [DataType(DataType.Date)]
         public DateTime PublishingDate { get; set; }
