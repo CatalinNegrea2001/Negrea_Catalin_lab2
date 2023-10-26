@@ -19,5 +19,7 @@ namespace Negrea_Catalin_lab2.Data
         public DbSet<Negrea_Catalin_lab2.Models.Publisher>? Publisher { get; set; }
 
         public DbSet<Negrea_Catalin_lab2.Models.Authors>? Authors { get; set; }
+
+        public DbSet<Negrea_Catalin_lab2.Models.Category>? Category { get; set; }
     }
 }

@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Negrea_Catalin_lab2.Data;
 using Negrea_Catalin_lab2.Models;
-
+using BookCategory = Negrea_Catalin_lab2.Models.BookCategory;
 namespace Negrea_Catalin_lab2.Pages.Books
 {
-    public class CreateModel : PageModel
+    public class CreateModel : BookCategoriesPageModel
     {
         private readonly Negrea_Catalin_lab2.Data.Negrea_Catalin_lab2Context _context;
 
@@ -24,14 +24,37 @@ namespace Negrea_Catalin_lab2.Pages.Books
             var authors = _context.Authors.Select(a => new { a.ID, FullName = $"{a.FirstName} {a.LastName}" }).ToList();
             ViewData["AuthorID"] = new SelectList(authors, "ID", "FullName");
             ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
+            var book = new Book();
+            book.BookCategories = new List<BookCategory>();
+            PopulateAssignedCategoryData(_context, book);
             return Page();
         }
 
 
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
-        
+        public Book Book { get; set; } = default;
+
+        public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
+        {
+            var newBook = new Book();
+            if (selectedCategories != null)
+            {
+                newBook.BookCategories = new List<BookCategory>();
+                foreach (var cat in selectedCategories)
+                {
+                    var catToAdd = new BookCategory
+                    {
+                        CategoryID = int.Parse(cat)
+                    };
+                    newBook.BookCategories.Add(catToAdd);
+                }
+            }
+            Book.BookCategories = newBook.BookCategories;
+            _context.Book.Add(Book);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("./Index");
+        }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
