@@ -54,21 +54,18 @@ namespace Negrea_Catalin_lab2.Pages.Books
             _context.Book.Add(Book);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
-        }
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
-        {
-          if (!ModelState.IsValid || _context.Book == null || Book == null)
+            if (!ModelState.IsValid || _context.Book == null || Book == null)
             {
+
                 return Page();
             }
-            
 
             _context.Book.Add(Book);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
+       
     }
 }

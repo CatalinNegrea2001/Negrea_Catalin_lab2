@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Negrea_Catalin_lab2.Data;
 
@@ -11,9 +12,10 @@ using Negrea_Catalin_lab2.Data;
 namespace Negrea_Catalin_lab2.Migrations
 {
     [DbContext(typeof(Negrea_Catalin_lab2Context))]
-    partial class Negrea_Catalin_lab2ContextModelSnapshot : ModelSnapshot
+    [Migration("20231102163452_CategoryIndex")]
+    partial class CategoryIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,9 @@ namespace Negrea_Catalin_lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
+                    b.Property<int?>("CategoryID")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,6 +44,8 @@ namespace Negrea_Catalin_lab2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CategoryID");
 
                     b.ToTable("Authors");
                 });
@@ -138,6 +145,13 @@ namespace Negrea_Catalin_lab2.Migrations
                     b.ToTable("Publisher");
                 });
 
+            modelBuilder.Entity("Negrea_Catalin_lab2.Models.Authors", b =>
+                {
+                    b.HasOne("Negrea_Catalin_lab2.Models.Category", null)
+                        .WithMany("Authors")
+                        .HasForeignKey("CategoryID");
+                });
+
             modelBuilder.Entity("Negrea_Catalin_lab2.Models.Book", b =>
                 {
                     b.HasOne("Negrea_Catalin_lab2.Models.Authors", "Author")
@@ -188,6 +202,8 @@ namespace Negrea_Catalin_lab2.Migrations
 
             modelBuilder.Entity("Negrea_Catalin_lab2.Models.Category", b =>
                 {
+                    b.Navigation("Authors");
+
                     b.Navigation("BookCategories");
 
                     b.Navigation("Books");
