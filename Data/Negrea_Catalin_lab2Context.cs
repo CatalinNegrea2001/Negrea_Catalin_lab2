@@ -21,5 +21,14 @@ namespace Negrea_Catalin_lab2.Data
         public DbSet<Negrea_Catalin_lab2.Models.Authors>? Authors { get; set; }
 
         public DbSet<Negrea_Catalin_lab2.Models.Category>? Category { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Book>()
+                .HasOne(b => b.Borrowing)
+                .WithOne(b => b.Book)
+                .HasForeignKey<Borrowing>(b => b.BookID);
+        }
+        public DbSet<Negrea_Catalin_lab2.Models.Member>? Member { get; set; }
+        public DbSet<Negrea_Catalin_lab2.Models.Borrowing>? Borrowing { get; set; }
     }
 }
